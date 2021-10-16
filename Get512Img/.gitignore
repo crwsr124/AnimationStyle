@@ -1,4 +1,5 @@
-./origin_img/
-./compress_video/
-./origin_video/
-./__pycache__/
+/origin_img/
+/compress_video/
+/origin_video/
+/__pycache__/
+.DS_Store
