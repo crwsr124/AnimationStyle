@@ -3,6 +3,7 @@ import time
 import numpy as np
 import cv2
 # import imageio
+from skimage import transform, img_as_ubyte
 from landmarks_detector import LandmarksDetector
 
 
@@ -74,14 +75,28 @@ def process_one_img(rgb_img, save_dir, start_num, frame_num):
 
             out_img = np.zeros(shape=(half_side_lengh*2+1, half_side_lengh*2+1, 3), dtype=np.uint8)
             out_img[y_up_in_out:y_down_in_out+1, x_left_in_out:x_right_in_out+1, :] = rgb_img[y_up_in_img:y_down_in_img+1, x_left_in_img:x_right_in_img+1, :]
-            # out_img = transform.resize(out_img, (512, 512), anti_aliasing=True)
-            out_img = cv2.resize(out_img, (512, 512))
-            # out_img = img_as_ubyte(out_img)
+            out_img = transform.resize(out_img, (512, 512), anti_aliasing=True)
+            out_img = img_as_ubyte(out_img)
+            # out_img = cv2.resize(out_img, (512, 512))
             # print("img dtype:", out_img.dtype.name)
             img_path = os.path.join(save_dir, "%d_%d_%d.png"%(start_num, frame_num, i))
             out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
             cv2.imwrite(img_path, out_img)
             # io.imsave(img_path, out_img)
+
+            #background img
+            bg_x_left = x_right_in_img
+            bg_x_right = x_right_in_img + 256
+            bg_y_up = y_up_in_img
+            bg_y_down = y_up_in_img + 256
+            if bg_x_right < width+1 and bg_y_down < height+1:
+                bg_img = rgb_img[bg_y_up:bg_y_down, bg_x_left:bg_x_right, :]
+                # bg_img = transform.resize(bg_img, (512, 512), anti_aliasing=True)
+                # bg_img = img_as_ubyte(bg_img)
+                # bg_img = cv2.resize(bg_img, (512, 512), interpolation=cv2.INTER_CUBIC)
+                bg_img_path = os.path.join(save_dir, "%d_%d_%d_background.png"%(start_num, frame_num, i))
+                bg_img = cv2.cvtColor(bg_img, cv2.COLOR_RGB2BGR)
+                cv2.imwrite(bg_img_path, bg_img)
         except:
             print("Exception in face crop!")
 
@@ -100,7 +115,7 @@ for i, file_path in enumerate(video_list):
     print("Deal with::::::::::::::::::::", file_path)
     file_extension = os.path.splitext(file_path)[-1]
     dis_file_path = os.path.join(compress_video_path, str(i) + file_extension)
-    shell_str = "./ffmpeg -i %s -r 2 %s"%(file_path, dis_file_path)
+    shell_str = "ffmpeg -i %s -r 2 %s"%(file_path, dis_file_path)
     os.system(shell_str)
     
 # crop face
