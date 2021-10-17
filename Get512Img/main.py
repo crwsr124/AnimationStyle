@@ -7,10 +7,15 @@ from skimage import transform, img_as_ubyte
 from landmarks_detector import LandmarksDetector
 
 
-origin_video_path = './origin_video/'
-compress_video_path = './compress_video/'
+
+
+
+origin_video_path = "/home/cr/Desktop/anime/Saihate_no_Paladin世界尽头的圣骑士/"
+# compress_video_path = './compress_video/'
+compress_video_path = "/home/cr/Desktop/anime/Saihate_no_Paladin世界尽头的圣骑士/"
+# os.makedirs(compress_video_path, exist_ok=True)
+
 origin_img_path = './origin_img/'
-os.makedirs(compress_video_path, exist_ok=True)
 os.makedirs(origin_img_path, exist_ok=True)
 
 def process_one_img(rgb_img, save_dir, start_num, frame_num):
@@ -104,19 +109,19 @@ def process_one_img(rgb_img, save_dir, start_num, frame_num):
 def findAllFile(base):
     for root, ds, fs in os.walk(base):
         for f in fs:
-            if f.endswith('.mp4') or f.endswith('.mov') or f.endswith('MP4'):
+            if f.endswith('.mp4') or f.endswith('.mov') or f.endswith('MP4') or f.endswith('.mkv'):
                 fullname = os.path.join(root, f)
                 yield fullname
 
 
-# compress video to 2fps
-video_list = findAllFile(origin_video_path)
-for i, file_path in enumerate(video_list):
-    print("Deal with::::::::::::::::::::", file_path)
-    file_extension = os.path.splitext(file_path)[-1]
-    dis_file_path = os.path.join(compress_video_path, str(i) + file_extension)
-    shell_str = "ffmpeg -i %s -r 2 %s"%(file_path, dis_file_path)
-    os.system(shell_str)
+# # compress video to 2fps
+# video_list = findAllFile(origin_video_path)
+# for i, file_path in enumerate(video_list):
+#     print("Deal with::::::::::::::::::::", file_path)
+#     file_extension = os.path.splitext(file_path)[-1]
+#     dis_file_path = os.path.join(compress_video_path, str(i) + file_extension)
+#     shell_str = "ffmpeg -r 60 -i '%s' %s"%(file_path, dis_file_path)
+#     os.system(shell_str)
     
 # crop face
 landmarks_detector = LandmarksDetector("shape_predictor_68_face_landmarks.dat")
@@ -133,6 +138,8 @@ for i, file_path in enumerate(compress_video_list):
         ret, img = vid.read()
         if img is None:
             break
+        if k % 10 > 0:
+            continue
         rgb_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         thumb = cv2.resize(img,(np.shape(rgb_img)[1]//6, np.shape(rgb_img)[0]//6))
         dets = landmarks_detector.detector(thumb, 1)
