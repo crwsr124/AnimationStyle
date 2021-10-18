@@ -10,9 +10,9 @@ from landmarks_detector import LandmarksDetector
 
 
 
-origin_video_path = "/home/cr/Desktop/anime/Saihate_no_Paladin世界尽头的圣骑士/"
+origin_video_path = "~/Desktop/anime_video/[KTXP][Violet_Evergarden紫罗兰的永恒花园][01-13][BIG5][1080p][BDrip]"
 # compress_video_path = './compress_video/'
-compress_video_path = "/home/cr/Desktop/anime/Saihate_no_Paladin世界尽头的圣骑士/"
+compress_video_path = "/home/cr/Desktop/anime_video/[Mmch.sub][Natsume Yuujinchou Roku东京喰种][01-11][END][GB][1080P]"
 # os.makedirs(compress_video_path, exist_ok=True)
 
 origin_img_path = './origin_img/'
@@ -54,7 +54,10 @@ def process_one_img(rgb_img, save_dir, start_num, frame_num):
 
             height, width, channels = np.shape(rgb_img)[0], np.shape(rgb_img)[1], np.shape(rgb_img)[2]
 
-            half_side_lengh = eye_to_chin_dis*1.4
+            # for portrait
+            # half_side_lengh = eye_to_chin_dis*1.4
+            # for animation
+            half_side_lengh = eye_to_chin_dis*1.5
             half_side_lengh = np.ceil(half_side_lengh)
             half_side_lengh = half_side_lengh.astype(np.int64)
 
