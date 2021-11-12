@@ -7,15 +7,8 @@ from skimage import transform, img_as_ubyte
 from landmarks_detector import LandmarksDetector
 
 
-
-
-
-origin_video_path = "~/Desktop/anime_video/[KTXP][Violet_Evergarden紫罗兰的永恒花园][01-13][BIG5][1080p][BDrip]"
-# compress_video_path = './compress_video/'
-compress_video_path = "/home/cr/Desktop/anime_video/[Mmch.sub][Natsume Yuujinchou Roku东京喰种][01-11][END][GB][1080P]"
-# os.makedirs(compress_video_path, exist_ok=True)
-
-origin_img_path = './origin_img/'
+video_path = "/home/cr/Desktop/anime_video/奇蛋物语"
+origin_img_path = './奇蛋物语/'
 os.makedirs(origin_img_path, exist_ok=True)
 
 def process_one_img(rgb_img, save_dir, start_num, frame_num):
@@ -128,7 +121,7 @@ def findAllFile(base):
     
 # crop face
 landmarks_detector = LandmarksDetector("shape_predictor_68_face_landmarks.dat")
-compress_video_list = findAllFile(compress_video_path)
+compress_video_list = findAllFile(video_path)
 for i, file_path in enumerate(compress_video_list):
     print("Deal with-----------------------", file_path)
     time_now = int(time.time())
